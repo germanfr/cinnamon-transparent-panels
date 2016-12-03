@@ -1,0 +1,21 @@
+#panel,
+#panelLeft,
+#panelCenter,
+#panelRight {
+	transition-duration: 200;
+}
+
+.panel-transparent,
+#panel.panel-transparent,
+.panel-transparent #panelLeft,
+.panel-transparent #panelCenter,
+.panel-transparent #panelRight,
+#panel.panel-transparent:highlight {
+	border-image: none;
+	border: none;
+	box-shadow: none;
+	background-gradient-direction: vertical;
+	background-gradient-start: transparent;
+	background-gradient-end: transparent;
+	background: transparent;
+}
