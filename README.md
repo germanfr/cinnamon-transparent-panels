@@ -4,6 +4,9 @@ Transparentize your panels when there are no any maximized windows
 
 ![Screenshot](screenshot.png)
 
+## Themes supported
+Transparent panels supports every theme in principle, but there are some themes that may not fit well. For such cases, the authors (or users) of the theme may override the `panel-transparent` class in their `cinnamon.css`, which can be enabled in the extension preferences.
+
 ## Installation
 ### Cinnamon Spices
 Download it [from here](https://cinnamon-spices.linuxmint.com/extensions/view/42) or search for _"Transparent panels"_ in your Cinnamon extension settings.
