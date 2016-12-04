@@ -1,0 +1,18 @@
+{
+	"main-section": {
+		"type": "section",
+		"description": "Transparent panels settings"
+	},
+	"transparency-type" : {
+		"type": "combobox",
+		"default" : "panel-transparent-gradient",
+		"description" : "Type of transparency",
+		"options" : {
+			"With shadow" : "panel-transparent-gradient",
+			"Fully transparent" : "panel-transparent-full",
+			"Semi-transparent" : "panel-transparent-semi",
+			"Defined by theme" : "panel-transparent"
+		},
+		"tooltip" : "Choose the type of transparency you want."
+	}
+}

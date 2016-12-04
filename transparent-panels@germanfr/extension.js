@@ -13,7 +13,7 @@ const Panel = imports.ui.panel;
 const WINDOW_FLAGS_MAXIMIZED = (Meta.MaximizeFlags.VERTICAL | Meta.MaximizeFlags.HORIZONTAL);
 
 function log(msg) {
-	global.log("Transparent panel: " + msg);
+	global.log('transparent-panels@germanfr: ' + msg);
 }
 
 function MyExtension(meta) {
@@ -26,6 +26,11 @@ MyExtension.prototype = {
 		this._meta = meta;
 		this._signals = null;
 		this.transparent = false;
+
+		this.settings = new Settings.ExtensionSettings(this, meta.uuid);
+		this.settings.bind('transparency-type', 'transparency_type', this.onSettingsUpdated, null);
+
+		this._classname = this.transparency_type ? this.transparency_type : 'panel-transparent-gradient';
 	},
 
 	enable: function () {
@@ -78,18 +83,29 @@ MyExtension.prototype = {
 			return;
 
 		Main.getPanels().forEach(function (panel, index) {
-			panel.actor.add_style_class_name("panel-transparent");
-		});
+			panel.actor.add_style_class_name(this._classname);
+		}, this);
 		this.transparent = true;
 	},
 
 	_makePanelsOpaque: function() {
 		if(this.transparent) {
 			Main.getPanels().forEach(function (panel, index) {
-				panel.actor.remove_style_class_name("panel-transparent");
-			});
+				panel.actor.remove_style_class_name(this._classname);
+			}, this);
 			this.transparent = false;
 		}
+	},
+
+	onSettingsUpdated: function () {
+		// Remove old classes
+		this.transparent = true;
+		this._makePanelsOpaque();
+
+		if (this.transparency_type) {
+			this._classname = this.transparency_type;
+		}
+		this.onWindowsStateChange();
 	}
 };
 
