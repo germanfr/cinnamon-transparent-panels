@@ -1,2 +1,5 @@
 * text eol=lf
+
+# Binary files mustn't change line endings
 *.png binary
+*.xcf binary
