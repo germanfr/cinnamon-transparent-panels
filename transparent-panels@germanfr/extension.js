@@ -17,17 +17,10 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const GLib = imports.gi.GLib;
-const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
-const Cinnamon = imports.gi.Cinnamon;
-const Util = imports.misc.util;
 const Settings = imports.ui.settings;
 const Main = imports.ui.main;
-const Lang = imports.lang;
-const Clutter = imports.gi.Clutter;
 const SignalManager = imports.misc.signalManager;
-const Panel = imports.ui.panel;
 
 const WINDOW_FLAGS_MAXIMIZED = (Meta.MaximizeFlags.VERTICAL | Meta.MaximizeFlags.HORIZONTAL);
 
