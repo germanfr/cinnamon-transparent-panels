@@ -40,8 +40,7 @@ MyExtension.prototype = {
 		this.transparent = false;
 
 		this.settings = new Settings.ExtensionSettings(this, meta.uuid);
-		this.settings.bind('transparency-type', 'transparency_type', this.onSettingsUpdated, null);
-
+		this._settings_bind_property('transparency-type', 'transparency_type', this.onSettingsUpdated);
 		this._classname = this.transparency_type ? this.transparency_type : 'panel-transparent-gradient';
 	},
 
@@ -87,7 +86,9 @@ MyExtension.prototype = {
 
 	_isWindowMaximized: function (win) {
 		let mwin = win.get_meta_window();
-		return (mwin.get_maximized() & WINDOW_FLAGS_MAXIMIZED) === WINDOW_FLAGS_MAXIMIZED && !mwin.minimized;
+		return !mwin.minimized &&
+			(mwin.get_maximized() & WINDOW_FLAGS_MAXIMIZED) === WINDOW_FLAGS_MAXIMIZED &&
+			mwin.get_window_type() !== Meta.WindowType.DESKTOP;
 	},
 
 	_makePanelsTransparent: function() {
@@ -118,6 +119,17 @@ MyExtension.prototype = {
 			this._classname = this.transparency_type;
 		}
 		this.onWindowsStateChange();
+	},
+	
+	// Keep backwards compatibility with 3.0.x for now
+	// but keep working if bindProperty was removed.
+	// To be removed soon
+	_settings_bind_property: function (key, applet_prop, callback) {
+		if(this.settings.bind) {
+			this.settings.bind(key, applet_prop, callback, null);
+		} else {
+			this.settings.bindProperty(Settings.BindingDirection.IN, key, applet_prop, callback, null);
+		}
 	}
 };
 
@@ -137,3 +149,4 @@ function init(metadata) {
 	if(extension === null)
 		extension = new MyExtension(metadata);
 }
+

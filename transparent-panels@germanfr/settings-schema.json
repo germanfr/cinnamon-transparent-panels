@@ -1,8 +1,4 @@
 {
-	"main-section": {
-		"type": "section",
-		"description": "Transparent panels settings"
-	},
 	"transparency-type" : {
 		"type": "combobox",
 		"default" : "panel-transparent-gradient",
