@@ -128,7 +128,8 @@ MyExtension.prototype = {
 		if(this.settings.bind) {
 			this.settings.bind(key, applet_prop, callback, null);
 		} else {
-			this.settings.bindProperty(Settings.BindingDirection.IN, key, applet_prop, callback, null);
+			this.settings.bindProperty( Settings.BindingDirection.BIDIRECTIONAL,
+				key, applet_prop, callback, null);
 		}
 	}
 };
@@ -137,7 +138,13 @@ MyExtension.prototype = {
 let extension = null;
 
 function enable() {
-	extension.enable();
+	try {
+		extension.enable();
+	} catch (err) {
+		global.logError(err);
+		disable();
+	}
+
 }
 
 function disable() {
@@ -149,4 +156,3 @@ function init(metadata) {
 	if(extension === null)
 		extension = new MyExtension(metadata);
 }
-
