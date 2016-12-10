@@ -46,7 +46,7 @@ MyExtension.prototype = {
 
 	enable: function () {
 		this._signals = new SignalManager.SignalManager(this);
-		this._signals.connect(global.window_manager, 'maximize', this.onWindowsStateChange);
+		this._signals.connect(global.window_manager, 'maximize', this._makePanelsOpaque);
 		this._signals.connect(global.window_manager, 'minimize', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'unmaximize', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'map', this.onWindowsStateChange);
@@ -61,6 +61,11 @@ MyExtension.prototype = {
 
 	disable: function () {
 		this._signals.disconnectAllSignals();
+		this._signals = null;
+
+		this.settings.finalize();
+		this.settings = null;
+
 		this._makePanelsOpaque();
 	},
 
@@ -144,7 +149,6 @@ function enable() {
 		global.logError(err);
 		disable();
 	}
-
 }
 
 function disable() {
