@@ -13,7 +13,8 @@ Download it [from here](https://cinnamon-spices.linuxmint.com/extensions/view/42
 ### From source
 To download the source and install it, execute the following as a normal user (you will need [git](https://git-scm.com/)).
 ``` bash
-$ git clone --depth 1 https://github.com/germanfr/cinnamon-transparent-panels.git & cp -r cinnamon-transparent-panels ~/.local/share/cinnamon/extensions/
+$ git clone --depth 1 https://github.com/germanfr/cinnamon-transparent-panels.git
+$ cp -r cinnamon-transparent-panels/transparent-panels@germanfr/ ~/.local/share/cinnamon/extensions/
 ```
 The above will download the source from GitHub and it will be copied to your `~/.local/share/cinnamon/extensions/` folder. If you don't have git installed, you can download a zip [from here](https://github.com/germanfr/cinnamon-transparent-panels/archive/master.zip).
 
