@@ -10,5 +10,9 @@
 			"Defined by theme" : "panel-transparent"
 		},
 		"tooltip" : "Choose the type of transparency you want."
+	},
+	"first-launch" : {
+		"type" : "generic",
+		"default" : true
 	}
 }
