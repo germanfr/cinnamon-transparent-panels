@@ -46,12 +46,11 @@ MyExtension.prototype = {
 
 	enable: function () {
 		this._signals = new SignalManager.SignalManager(this);
-		this._signals.connect(global.window_manager, 'maximize', this._makePanelsOpaque);
+		this._signals.connect(global.window_manager, 'maximize', this._onWindowMaximized);
 		this._signals.connect(global.window_manager, 'minimize', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'unmaximize', this.onWindowsStateChange);
-		this._signals.connect(global.window_manager, 'map', this.onWindowsStateChange);
+		this._signals.connect(global.window_manager, 'map', this._onWindowShown);
 
-		this._signals.connect(global.screen, 'window-added', this.onWindowsStateChange);
 		this._signals.connect(global.screen, 'window-removed', this.onWindowsStateChange);
 
 		this._signals.connect(global.window_manager, 'switch-workspace', this.onWindowsStateChange);
@@ -67,6 +66,16 @@ MyExtension.prototype = {
 		this.settings = null;
 
 		this._makePanelsOpaque();
+	},
+
+	_onWindowMaximized: function() {
+		this._makePanelsOpaque();
+	},
+
+	_onWindowShown: function(cinnwm, win) {
+		if(this._isWindowMaximized(win)) {
+			this._makePanelsOpaque();
+		}
 	},
 
 	onWindowsStateChange: function () {
