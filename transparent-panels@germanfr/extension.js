@@ -73,7 +73,9 @@ MyExtension.prototype = {
 	},
 
 	_onWindowShown: function(cinnwm, win) {
-		if(this._isWindowMaximized(win)) {
+		let metawin = win.get_meta_window();
+
+		if(this._isWindowMaximized(metawin)) {
 			this._makePanelsOpaque();
 		}
 	},
@@ -87,11 +89,11 @@ MyExtension.prototype = {
 	},
 
 	_checkAnyWindowMaximized: function() {
-		let workspaceIndex = global.screen.get_active_workspace_index();
-		let workspaceWins = Main.getWindowActorsForWorkspace(workspaceIndex);
+		let workspace = global.screen.get_active_workspace();
+		let windows = workspace.list_windows();
 
-		for(let i=0, nWins = workspaceWins.length; i < nWins; ++i) {
-			if(this._isWindowMaximized(workspaceWins[i])) {
+		for(let i=0, n_wins = windows.length; i < n_wins; ++i) {
+			if(this._isWindowMaximized(windows[i])) {
 				return true;
 			}
 		}
@@ -99,10 +101,9 @@ MyExtension.prototype = {
 	},
 
 	_isWindowMaximized: function (win) {
-		let mwin = win.get_meta_window();
-		return !mwin.minimized &&
-			(mwin.get_maximized() & WINDOW_FLAGS_MAXIMIZED) === WINDOW_FLAGS_MAXIMIZED &&
-			mwin.get_window_type() !== Meta.WindowType.DESKTOP;
+		return !win.minimized &&
+			(win.get_maximized() & WINDOW_FLAGS_MAXIMIZED) === WINDOW_FLAGS_MAXIMIZED &&
+			win.get_window_type() !== Meta.WindowType.DESKTOP;
 	},
 
 	_makePanelsTransparent: function() {
@@ -134,7 +135,7 @@ MyExtension.prototype = {
 		}
 		this.onWindowsStateChange();
 	},
-	
+
 	// Keep backwards compatibility with 3.0.x for now
 	// but keep working if bindProperty was removed.
 	// To be removed soon
