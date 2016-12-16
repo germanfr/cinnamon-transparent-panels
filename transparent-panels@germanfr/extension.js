@@ -46,7 +46,7 @@ MyExtension.prototype = {
 
 	enable: function () {
 		this._signals = new SignalManager.SignalManager(this);
-		this._signals.connect(global.window_manager, 'maximize', this._onWindowMaximized);
+		this._signals.connect(global.window_manager, 'maximize', this._onWindowShown);
 		this._signals.connect(global.window_manager, 'minimize', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'unmaximize', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'map', this._onWindowShown);
@@ -65,10 +65,6 @@ MyExtension.prototype = {
 		this.settings.finalize();
 		this.settings = null;
 
-		this._makePanelsOpaque();
-	},
-
-	_onWindowMaximized: function() {
 		this._makePanelsOpaque();
 	},
 
