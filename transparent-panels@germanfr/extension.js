@@ -23,6 +23,7 @@ const Main = imports.ui.main;
 const SignalManager = imports.misc.signalManager;
 
 const WINDOW_FLAGS_MAXIMIZED = (Meta.MaximizeFlags.VERTICAL | Meta.MaximizeFlags.HORIZONTAL);
+const ANIMATIONS_DURATION = 200;
 
 function log(msg) {
 	global.log('transparent-panels@germanfr: ' + msg);
@@ -42,6 +43,7 @@ MyExtension.prototype = {
 		this.settings = new Settings.ExtensionSettings(this, meta.uuid);
 		this._settings_bind_property('transparency-type', 'transparency_type', this.onSettingsUpdated);
 		this._classname = this.transparency_type ? this.transparency_type : 'panel-transparent-gradient';
+		this._settings_bind_property('opacify', 'opacify');
 	},
 
 	enable: function () {
@@ -106,19 +108,44 @@ MyExtension.prototype = {
 		if(this.transparent)
 			return;
 
-		Main.getPanels().forEach(function (panel, index) {
-			panel.actor.add_style_class_name(this._classname);
-		}, this);
+		if(this.opacify) {
+			Main.getPanels().forEach(function (panel) {
+				this._setBackgroundOpacity(panel, 0);
+				panel.actor.add_style_class_name(this._classname);
+			}, this);
+		} else {
+			Main.getPanels().forEach(function (panel) {
+				panel.actor.add_style_class_name(this._classname);
+			}, this);
+		}
 		this.transparent = true;
 	},
 
 	_makePanelsOpaque: function() {
 		if(this.transparent) {
-			Main.getPanels().forEach(function (panel, index) {
-				panel.actor.remove_style_class_name(this._classname);
-			}, this);
+			if(this.opacify) {
+				Main.getPanels().forEach(function (panel) {
+					this._setBackgroundOpacity(panel, 255);
+					panel.actor.remove_style_class_name(this._classname);
+				}, this);
+			} else {
+				Main.getPanels().forEach(function (panel) {
+					panel.actor.remove_style_class_name(this._classname);
+				}, this);
+			}
+
 			this.transparent = false;
 		}
+	},
+
+	_setBackgroundOpacity: function (panel, alpha) {
+		let p_actor = panel.actor;
+		let color = p_actor.get_background_color();
+		color.alpha = alpha;
+		p_actor.save_easing_state();
+		p_actor.set_easing_duration(ANIMATIONS_DURATION);
+		p_actor.set_background_color(color);
+		p_actor.restore_easing_state();
 	},
 
 	onSettingsUpdated: function () {

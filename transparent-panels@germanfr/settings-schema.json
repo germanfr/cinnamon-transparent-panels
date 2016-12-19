@@ -1,6 +1,6 @@
 {
 	"transparency-type" : {
-		"type": "combobox",
+		"type" : "combobox",
 		"default" : "panel-transparent-gradient",
 		"description" : "Type of transparency",
 		"options" : {
@@ -10,5 +10,11 @@
 			"Defined by theme" : "panel-transparent"
 		},
 		"tooltip" : "Choose the type of transparency you want."
+	},
+
+	"opacify" : {
+		"type" : "checkbox",
+		"default" : false,
+		"description" : "Remove transparency when maximized"
 	}
 }
