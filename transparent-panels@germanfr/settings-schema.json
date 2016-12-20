@@ -15,6 +15,6 @@
 	"opacify" : {
 		"type" : "checkbox",
 		"default" : false,
-		"description" : "Remove transparency when maximized"
+		"description" : "Remove transparency when maximized (experimental)"
 	}
 }
