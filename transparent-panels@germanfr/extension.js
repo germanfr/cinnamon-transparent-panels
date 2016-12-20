@@ -51,7 +51,7 @@ MyExtension.prototype = {
 		this._signals.connect(global.window_manager, 'maximize', this._onWindowMaximized);
 		this._signals.connect(global.window_manager, 'unmaximize', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'switch-workspace', this.onWindowsStateChange);
-		this._signals.connect(global.display, "notify::focus-window", this._onFocusChanged);
+		this._signals.connect(global.display, 'notify::focus-window', this._onFocusChanged);
 
 		this.onWindowsStateChange();
 	},
@@ -66,10 +66,10 @@ MyExtension.prototype = {
 		this._makePanelsOpaque();
 	},
 
-	_onWindowMaximized: function(wm, win) {
+	_onWindowMaximized: function (wm, win) {
 		let metawin = win.get_meta_window();
 
-		if(this._isWindowMaximized(metawin)) {
+		if (this._isWindowMaximized(metawin)) {
 			this._makePanelsOpaque();
 		}
 	},
@@ -77,7 +77,7 @@ MyExtension.prototype = {
 	_onFocusChanged: function (display) {
 		let focused = display.get_focus_window();
 
-		if(focused.get_window_type() === Meta.WindowType.DESKTOP) {
+		if (focused.get_window_type() === Meta.WindowType.DESKTOP) {
 			this._makePanelsTransparent();
 		} else {
 			this.onWindowsStateChange();
@@ -85,19 +85,19 @@ MyExtension.prototype = {
 	},
 
 	onWindowsStateChange: function () {
-		if(this._checkAnyWindowMaximized()) {
+		if (this._checkAnyWindowMaximized()) {
 			this._makePanelsOpaque();
 		} else {
 			this._makePanelsTransparent();
 		}
 	},
 
-	_checkAnyWindowMaximized: function() {
+	_checkAnyWindowMaximized: function () {
 		let workspace = global.screen.get_active_workspace();
 		let windows = workspace.list_windows();
 
 		for(let i=0, n_wins = windows.length; i < n_wins; ++i) {
-			if(this._isWindowMaximized(windows[i])) {
+			if (this._isWindowMaximized(windows[i])) {
 				return true;
 			}
 		}
@@ -110,11 +110,11 @@ MyExtension.prototype = {
 			win.get_window_type() !== Meta.WindowType.DESKTOP;
 	},
 
-	_makePanelsTransparent: function() {
-		if(this.transparent)
+	_makePanelsTransparent: function () {
+		if (this.transparent)
 			return;
 
-		if(this.opacify) {
+		if (this.opacify) {
 			Main.getPanels().forEach(function (panel) {
 				this._setBackgroundOpacity(panel, 0);
 				panel.actor.add_style_class_name(this._classname);
@@ -127,9 +127,9 @@ MyExtension.prototype = {
 		this.transparent = true;
 	},
 
-	_makePanelsOpaque: function() {
-		if(this.transparent) {
-			if(this.opacify) {
+	_makePanelsOpaque: function () {
+		if (this.transparent) {
+			if (this.opacify) {
 				Main.getPanels().forEach(function (panel) {
 					this._setBackgroundOpacity(panel, 255);
 					panel.actor.remove_style_class_name(this._classname);
@@ -169,7 +169,7 @@ MyExtension.prototype = {
 	// but keep working if bindProperty was removed.
 	// To be removed soon
 	_settings_bind_property: function (key, applet_prop, callback) {
-		if(this.settings.bind) {
+		if (this.settings.bind) {
 			this.settings.bind(key, applet_prop, callback, null);
 		} else {
 			this.settings.bindProperty( Settings.BindingDirection.BIDIRECTIONAL,
@@ -196,6 +196,6 @@ function disable() {
 }
 
 function init(metadata) {
-	if(extension === null)
+	if (extension === null)
 		extension = new MyExtension(metadata);
 }
