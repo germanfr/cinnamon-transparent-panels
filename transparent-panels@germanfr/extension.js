@@ -48,14 +48,10 @@ MyExtension.prototype = {
 
 	enable: function () {
 		this._signals = new SignalManager.SignalManager(this);
-		this._signals.connect(global.window_manager, 'maximize', this._onWindowShown);
-		this._signals.connect(global.window_manager, 'minimize', this.onWindowsStateChange);
+		this._signals.connect(global.window_manager, 'maximize', this._onWindowMaximized);
 		this._signals.connect(global.window_manager, 'unmaximize', this.onWindowsStateChange);
-		this._signals.connect(global.window_manager, 'map', this._onWindowShown);
-
-		this._signals.connect(global.screen, 'window-removed', this.onWindowsStateChange);
-
 		this._signals.connect(global.window_manager, 'switch-workspace', this.onWindowsStateChange);
+		this._signals.connect(global.display, "notify::focus-window", this._onFocusChanged);
 
 		this.onWindowsStateChange();
 	},
@@ -70,11 +66,21 @@ MyExtension.prototype = {
 		this._makePanelsOpaque();
 	},
 
-	_onWindowShown: function(cinnwm, win) {
+	_onWindowMaximized: function(wm, win) {
 		let metawin = win.get_meta_window();
 
 		if(this._isWindowMaximized(metawin)) {
 			this._makePanelsOpaque();
+		}
+	},
+
+	_onFocusChanged: function (display) {
+		let focused = display.get_focus_window();
+
+		if(focused.get_window_type() === Meta.WindowType.DESKTOP) {
+			this._makePanelsTransparent();
+		} else {
+			this.onWindowsStateChange();
 		}
 	},
 
