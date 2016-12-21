@@ -48,10 +48,18 @@ MyExtension.prototype = {
 
 	enable: function () {
 		this._signals = new SignalManager.SignalManager(this);
-		this._signals.connect(global.window_manager, 'maximize', this._onWindowMaximized);
+		this._signals.connect(global.window_manager, 'maximize', this._onWindowAppeared);
+		this._signals.connect(global.window_manager, 'map', this._onWindowAppeared);
+
+		this._signals.connect(global.window_manager, 'minimize', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'unmaximize', this.onWindowsStateChange);
+		this._signals.connect(global.screen, 'window-removed', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'switch-workspace', this.onWindowsStateChange);
-		this._signals.connect(global.display, 'notify::focus-window', this._onFocusChanged);
+
+		let desktop_ws = this._fetchDesktopWindows();
+		for(let i = 0; i < desktop_ws.length; ++i) {
+			this._signals.connect(desktop_ws[i], 'focus', this._onDesktopFocused);
+		}
 
 		this.onWindowsStateChange();
 	},
@@ -66,21 +74,40 @@ MyExtension.prototype = {
 		this._makePanelsOpaque();
 	},
 
-	_onWindowMaximized: function (wm, win) {
+	_fetchDesktopWindows: function () {
+		let windows = global.get_window_actors();
+		let desktops = [];
+		for(let i=0; i < windows.length; ++i) {
+			let mw = windows[i].get_meta_window();
+			if (mw.get_window_type() === Meta.WindowType.DESKTOP) {
+				desktops.push(mw);
+			}
+		}
+		return desktops;
+	},
+
+	_onDesktopFocused: function (desktop) {
+		if (desktop.get_window_type() !== Meta.WindowType.DESKTOP)
+			return;
+
+		this._makePanelsTransparent();
+
+		// Listen to focus on other windows until it happens
+		// to avoid unnecessary overhead
+		this._signals.connect(global.display, 'notify::focus-window',
+			function (display) {
+				if (desktop === display.get_focus_window())
+					return;
+				this._signals.disconnect('notify::focus-window', display);
+				this.onWindowsStateChange();
+			});
+	},
+
+	_onWindowAppeared: function (wm, win) {
 		let metawin = win.get_meta_window();
 
 		if (this._isWindowMaximized(metawin)) {
 			this._makePanelsOpaque();
-		}
-	},
-
-	_onFocusChanged: function (display) {
-		let focused = display.get_focus_window();
-
-		if (focused.get_window_type() === Meta.WindowType.DESKTOP) {
-			this._makePanelsTransparent();
-		} else {
-			this.onWindowsStateChange();
 		}
 	},
 
