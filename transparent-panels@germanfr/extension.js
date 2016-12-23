@@ -56,12 +56,8 @@ MyExtension.prototype = {
 		this._signals.connect(global.screen, 'window-removed', this.onWindowsStateChange);
 		this._signals.connect(global.window_manager, 'switch-workspace', this.onWindowsStateChange);
 
-		let desktop_ws = this._fetchDesktopWindows();
-		for(let i = 0; i < desktop_ws.length; ++i) {
-			this._signals.connect(desktop_ws[i], 'focus', this._onDesktopFocused);
-		}
-
-		this.onWindowsStateChange();
+		this._makePanelsTransparent();
+		this._detectWindows();
 	},
 
 	disable: function () {
@@ -74,16 +70,16 @@ MyExtension.prototype = {
 		this._makePanelsOpaque();
 	},
 
-	_fetchDesktopWindows: function () {
-		let windows = global.get_window_actors();
-		let desktops = [];
-		for(let i=0; i < windows.length; ++i) {
-			let mw = windows[i].get_meta_window();
-			if (mw.get_window_type() === Meta.WindowType.DESKTOP) {
-				desktops.push(mw);
-			}
+	_detectWindows: function () {
+		let windows = global.display.list_windows(0);
+		if (windows.length == 0) {
+			this._signals.connect(global.display, 'window-created', this._onWindowAddedStartup);
+			this._signals.connect(global.display, 'notify::focus-window', this._disconnectStartupEvents);
+		} else {
+			windows.forEach(function (win) {
+				this._onWindowAddedStartup(global.display, win);
+			}, this);
 		}
-		return desktops;
 	},
 
 	_onDesktopFocused: function (desktop) {
@@ -95,17 +91,29 @@ MyExtension.prototype = {
 		// Listen to focus on other windows until it happens
 		// to avoid unnecessary overhead
 		this._signals.connect(global.display, 'notify::focus-window',
-			function (display) {
+			function onUnfocus (display) {
 				if (desktop === display.get_focus_window())
 					return;
-				this._signals.disconnect('notify::focus-window', display);
+				this._signals.disconnect('notify::focus-window', display, onUnfocus);
 				this.onWindowsStateChange();
 			});
 	},
 
+	_onWindowAddedStartup: function (display, win) {
+		if (win.get_window_type() === Meta.WindowType.DESKTOP) {
+			this._signals.connect(win, 'focus', this._onDesktopFocused);
+		} else if (this._isWindowMaximized(win)) {
+			this._makePanelsOpaque();
+		}
+	},
+
+	_disconnectStartupEvents: function () {
+		this._signals.disconnect('window-created', global.display, this._onWindowAddedStartup);
+		this._signals.disconnect('notify::focus-window', global.display, this._disconnectStartupEvents);
+	},
+
 	_onWindowAppeared: function (wm, win) {
 		let metawin = win.get_meta_window();
-
 		if (this._isWindowMaximized(metawin)) {
 			this._makePanelsOpaque();
 		}
