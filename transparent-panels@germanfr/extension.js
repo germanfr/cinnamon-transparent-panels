@@ -220,14 +220,19 @@ function enable() {
 	try {
 		extension.enable();
 	} catch (err) {
-		global.logError(err);
-		disable();
+		extension.disable();
+		throw err;
 	}
 }
 
 function disable() {
-	extension.disable();
-	extension = null;
+	try {
+		extension.disable();
+	} catch(err) {
+		global.logError(err);
+	} finally {
+		extension = null;
+	}
 }
 
 function init(metadata) {
