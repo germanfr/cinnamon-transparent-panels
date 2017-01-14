@@ -1,0 +1,45 @@
+#
+msgid ""
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->description
+msgid "Type of transparency"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->tooltip
+msgid "Choose the type of transparency you want."
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->options
+msgid "Defined by theme"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->options
+msgid "Fully transparent"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->options
+msgid "Semi-transparent"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->options
+msgid "With shadow"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->opacify->description
+msgid "Remove transparency when maximized (experimental)"
+msgstr ""
+
+#. transparent-panels@germanfr->metadata.json->name
+msgid "Transparent panels"
+msgstr ""
+
+#. transparent-panels@germanfr->metadata.json->description
+msgid "Transparentize your panels when there are no any maximized windows"
+msgstr ""
