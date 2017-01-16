@@ -33,7 +33,11 @@ msgid "With shadow"
 msgstr ""
 
 #. transparent-panels@germanfr->settings-schema.json->opacify->description
-msgid "Remove transparency when maximized (experimental)"
+msgid "Remove theme transparency (experimental)"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->opacify->tooltip
+msgid "Remove panel transparency when it's not transparent."
 msgstr ""
 
 #. transparent-panels@germanfr->metadata.json->name

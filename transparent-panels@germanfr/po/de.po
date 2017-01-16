@@ -4,14 +4,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
+"Last-Translator: NikoKrause\n"
 "Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
-"Last-Translator: \n"
+"X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: de\n"
 
 #. transparent-panels@germanfr->settings-schema.json->transparency-
 #. type->description
@@ -44,8 +44,12 @@ msgid "With shadow"
 msgstr "Mit Schatten"
 
 #. transparent-panels@germanfr->settings-schema.json->opacify->description
-msgid "Remove transparency when maximized (experimental)"
-msgstr "Transparenz entfernen, wenn Fenster maximiert sind (experimentell)"
+msgid "Remove theme transparency (experimental)"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->opacify->tooltip
+msgid "Remove panel transparency when it's not transparent."
+msgstr ""
 
 #. transparent-panels@germanfr->metadata.json->name
 msgid "Transparent panels"

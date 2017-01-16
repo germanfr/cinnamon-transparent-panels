@@ -15,6 +15,7 @@
 	"opacify" : {
 		"type" : "checkbox",
 		"default" : false,
-		"description" : "Remove transparency when maximized (experimental)"
+		"description" : "Remove theme transparency (experimental)",
+		"tooltip" : "Remove panel transparency when it's not transparent."
 	}
 }
