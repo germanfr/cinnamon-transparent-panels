@@ -149,17 +149,16 @@ MyExtension.prototype = {
 	// time the extension is loaded. It's not worth it to
 	// create a separate class, so we build everything here.
 	showStartupNotification: function() {
-		let source = new MessageTray.Source('Extension settings');
-		let self = this;
+		let source = new MessageTray.Source(this._meta.name);
 		let params = {
 			icon: new St.Icon({
-					icon_name: 'preferences-desktop-theme',
+					icon_name: 'transparent-panels',
 					icon_type: St.IconType.FULLCOLOR,
 					icon_size: source.ICON_SIZE })
 		};
 
 		let notification = new MessageTray.Notification(source,
-			this._meta.name + ' enabled',
+			'%s enabled'.format(this._meta.name),
 			'Open the extension settings and customize your panels',
 			params);
 
