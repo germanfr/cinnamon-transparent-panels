@@ -21,6 +21,10 @@ const Meta = imports.gi.Meta;
 const Settings = imports.ui.settings;
 const Main = imports.ui.main;
 const SignalManager = imports.misc.signalManager;
+const Util = imports.misc.util;
+const MessageTray = imports.ui.messageTray;
+const St = imports.gi.St;
+const Lang = imports.lang;
 
 const WINDOW_FLAGS_MAXIMIZED = (Meta.MaximizeFlags.VERTICAL | Meta.MaximizeFlags.HORIZONTAL);
 const ANIMATIONS_DURATION = 200;
@@ -42,6 +46,7 @@ MyExtension.prototype = {
 
 		this.settings = new Settings.ExtensionSettings(this, meta.uuid);
 		this._settings_bind_property('transparency-type', 'transparency_type', this.onSettingsUpdated);
+		this._settings_bind_property('first-launch', 'firstLaunch');
 		this._classname = this.transparency_type ? this.transparency_type : 'panel-transparent-gradient';
 		this._settings_bind_property('opacify', 'opacify');
 	},
@@ -58,6 +63,11 @@ MyExtension.prototype = {
 
 		this._makePanelsTransparent();
 		this._detectWindows();
+
+		if(this.firstLaunch) {
+			this.showStartupNotification();
+			this.firstLaunch = false;
+		}
 	},
 
 	disable: function () {
@@ -198,6 +208,34 @@ MyExtension.prototype = {
 			this._classname = this.transparency_type;
 		}
 		this.onWindowsStateChange();
+	},
+
+	// This will be called only once the first
+	// time the extension is loaded. It's not worth it to
+	// create a separate class, so we build everything here.
+	showStartupNotification: function() {
+		let source = new MessageTray.Source(this._meta.name);
+		let params = {
+			icon: new St.Icon({
+					icon_name: 'transparent-panels',
+					icon_type: St.IconType.FULLCOLOR,
+					icon_size: source.ICON_SIZE })
+		};
+
+		let notification = new MessageTray.Notification(source,
+			'%s enabled'.format(this._meta.name),
+			'Open the extension settings and customize your panels',
+			params);
+
+		notification.addButton('open-settings', 'Open settings');
+		notification.connect('action-invoked', Lang.bind(this, this.launchSettings));
+
+		Main.messageTray.add(source);
+		source.notify(notification);
+	},
+
+	launchSettings: function() {
+		Util.spawnCommandLine('xlet-settings extension ' + this._meta.uuid);
 	},
 
 	// Keep backwards compatibility with 3.0.x for now

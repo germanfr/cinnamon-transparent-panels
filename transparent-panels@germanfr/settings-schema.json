@@ -11,11 +11,14 @@
 		},
 		"tooltip" : "Choose the type of transparency you want."
 	},
-
 	"opacify" : {
 		"type" : "checkbox",
 		"default" : false,
 		"description" : "Remove theme transparency (experimental)",
 		"tooltip" : "Remove panel transparency when it's not transparent."
+	},
+	"first-launch" : {
+		"type" : "generic",
+		"default" : true
 	}
 }
