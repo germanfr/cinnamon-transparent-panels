@@ -26,7 +26,7 @@ const MessageTray = imports.ui.messageTray;
 const St = imports.gi.St;
 const Lang = imports.lang;
 
-const WINDOW_FLAGS_MAXIMIZED = (Meta.MaximizeFlags.VERTICAL | Meta.MaximizeFlags.HORIZONTAL);
+const META_WINDOW_MAXIMIZED = (Meta.MaximizeFlags.VERTICAL | Meta.MaximizeFlags.HORIZONTAL);
 const ANIMATIONS_DURATION = 200;
 
 function log(msg) {
@@ -80,12 +80,16 @@ MyExtension.prototype = {
 		this._makePanelsOpaque();
 	},
 
+	// No windows present at startup, but we need to connect to desktops somehow.
+	// Listen to a window-created when they don't exist yet until any
+	// window gains focus, when all are supposed to be created (can be improved).
 	_detectWindows: function () {
 		let windows = global.display.list_windows(0);
-		if (windows.length == 0) {
+
+		if (windows.length == 0) { // When the extension is loaded at startup
 			this._signals.connect(global.display, 'window-created', this._onWindowAddedStartup);
 			this._signals.connect(global.display, 'notify::focus-window', this._disconnectStartupEvents);
-		} else {
+		} else { // When the extension is loaded in the middle of a session
 			windows.forEach(function (win) {
 				this._onWindowAddedStartup(global.display, win);
 			}, this);
@@ -98,8 +102,8 @@ MyExtension.prototype = {
 
 		this._makePanelsTransparent();
 
-		// Listen to focus on other windows until it happens
-		// to avoid unnecessary overhead
+		// Listen to focus on other windows since desktop is focused until another
+		// window gains focus, to avoid innecesary overhead each time focus changes.
 		this._signals.connect(global.display, 'notify::focus-window',
 			function onUnfocus (display) {
 				if (desktop === display.get_focus_window())
@@ -109,6 +113,7 @@ MyExtension.prototype = {
 			});
 	},
 
+	// Parse windows status at startup
 	_onWindowAddedStartup: function (display, win) {
 		if (win.get_window_type() === Meta.WindowType.DESKTOP) {
 			this._signals.connect(win, 'focus', this._onDesktopFocused);
@@ -151,7 +156,7 @@ MyExtension.prototype = {
 
 	_isWindowMaximized: function (win) {
 		return !win.minimized &&
-			(win.get_maximized() & WINDOW_FLAGS_MAXIMIZED) === WINDOW_FLAGS_MAXIMIZED &&
+			(win.get_maximized() & META_WINDOW_MAXIMIZED) === META_WINDOW_MAXIMIZED &&
 			win.get_window_type() !== Meta.WindowType.DESKTOP;
 	},
 
