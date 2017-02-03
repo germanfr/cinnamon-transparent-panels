@@ -25,12 +25,23 @@ const Util = imports.misc.util;
 const MessageTray = imports.ui.messageTray;
 const St = imports.gi.St;
 const Lang = imports.lang;
+const Gettext = imports.gettext;
+const GLib = imports.gi.GLib;
 
 const META_WINDOW_MAXIMIZED = (Meta.MaximizeFlags.VERTICAL | Meta.MaximizeFlags.HORIZONTAL);
 const ANIMATIONS_DURATION = 200;
+let UUID;
 
 function log(msg) {
 	global.log('transparent-panels@germanfr: ' + msg);
+}
+
+function _(str) {
+	let customTranslation = Gettext.dgettext(UUID, str);
+	if(customTranslation !== str) {
+		return customTranslation;
+	}
+	return Gettext.gettext(str);
 }
 
 function MyExtension(meta) {
@@ -49,6 +60,9 @@ MyExtension.prototype = {
 		this._settings_bind_property('first-launch', 'firstLaunch');
 		this._classname = this.transparency_type ? this.transparency_type : 'panel-transparent-gradient';
 		this._settings_bind_property('opacify', 'opacify');
+
+		UUID = meta.uuid;
+		Gettext.bindtextdomain(UUID, GLib.get_home_dir() + '/.local/share/locale');
 	},
 
 	enable: function () {
@@ -228,8 +242,8 @@ MyExtension.prototype = {
 		};
 
 		let notification = new MessageTray.Notification(source,
-			'%s enabled'.format(this._meta.name),
-			'Open the extension settings and customize your panels',
+			_("%s enabled").format(this._meta.name),
+			_("Open the extension settings and customize your panels"),
 			params);
 
 		notification.addButton('open-settings', 'Open settings');

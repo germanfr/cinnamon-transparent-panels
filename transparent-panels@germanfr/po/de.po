@@ -13,6 +13,15 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: extension.js:245
+#, c-format
+msgid "%s enabled"
+msgstr ""
+
+#: extension.js:246
+msgid "Open the extension settings and customize your panels"
+msgstr ""
+
 #. transparent-panels@germanfr->settings-schema.json->transparency-
 #. type->description
 msgid "Type of transparency"

@@ -2,6 +2,15 @@
 msgid ""
 msgstr ""
 
+#: extension.js:245
+#, c-format
+msgid "%s enabled"
+msgstr ""
+
+#: extension.js:246
+msgid "Open the extension settings and customize your panels"
+msgstr ""
+
 #. transparent-panels@germanfr->settings-schema.json->transparency-
 #. type->description
 msgid "Type of transparency"
