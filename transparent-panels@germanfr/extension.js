@@ -33,7 +33,7 @@ const ANIMATIONS_DURATION = 200;
 let UUID;
 
 function log(msg) {
-	global.log('transparent-panels@germanfr: ' + msg);
+	global.log(UUID + ": " + msg);
 }
 
 function _(str) {
@@ -56,24 +56,24 @@ MyExtension.prototype = {
 		this.transparent = false;
 
 		this.settings = new Settings.ExtensionSettings(this, meta.uuid);
-		this._settings_bind_property('transparency-type', 'transparency_type', this.onSettingsUpdated);
-		this._settings_bind_property('first-launch', 'firstLaunch');
-		this._classname = this.transparency_type ? this.transparency_type : 'panel-transparent-gradient';
-		this._settings_bind_property('opacify', 'opacify');
+		this._settings_bind_property("transparency-type", "transparency_type", this.onSettingsUpdated);
+		this._settings_bind_property("first-launch", "firstLaunch");
+		this._classname = this.transparency_type ? this.transparency_type : "panel-transparent-gradient";
+		this._settings_bind_property("opacify", "opacify");
 
 		UUID = meta.uuid;
-		Gettext.bindtextdomain(UUID, GLib.get_home_dir() + '/.local/share/locale');
+		Gettext.bindtextdomain(UUID, GLib.get_home_dir() + "/.local/share/locale");
 	},
 
 	enable: function () {
 		this._signals = new SignalManager.SignalManager(this);
-		this._signals.connect(global.window_manager, 'maximize', this._onWindowAppeared);
-		this._signals.connect(global.window_manager, 'map', this._onWindowAppeared);
+		this._signals.connect(global.window_manager, "maximize", this._onWindowAppeared);
+		this._signals.connect(global.window_manager, "map", this._onWindowAppeared);
 
-		this._signals.connect(global.window_manager, 'minimize', this.onWindowsStateChange);
-		this._signals.connect(global.window_manager, 'unmaximize', this.onWindowsStateChange);
-		this._signals.connect(global.screen, 'window-removed', this.onWindowsStateChange);
-		this._signals.connect(global.window_manager, 'switch-workspace', this.onWindowsStateChange);
+		this._signals.connect(global.window_manager, "minimize", this.onWindowsStateChange);
+		this._signals.connect(global.window_manager, "unmaximize", this.onWindowsStateChange);
+		this._signals.connect(global.screen, "window-removed", this.onWindowsStateChange);
+		this._signals.connect(global.window_manager, "switch-workspace", this.onWindowsStateChange);
 
 		this._makePanelsTransparent();
 		this._detectWindows();
@@ -95,14 +95,14 @@ MyExtension.prototype = {
 	},
 
 	// No windows present at startup, but we need to connect to desktops somehow.
-	// Listen to a window-created when they don't exist yet until any
+	// Listen to a window-created when they don"t exist yet until any
 	// window gains focus, when all are supposed to be created (can be improved).
 	_detectWindows: function () {
 		let windows = global.display.list_windows(0);
 
 		if (windows.length == 0) { // When the extension is loaded at startup
-			this._signals.connect(global.display, 'window-created', this._onWindowAddedStartup);
-			this._signals.connect(global.display, 'notify::focus-window', this._disconnectStartupEvents);
+			this._signals.connect(global.display, "window-created", this._onWindowAddedStartup);
+			this._signals.connect(global.display, "notify::focus-window", this._disconnectStartupEvents);
 		} else { // When the extension is loaded in the middle of a session
 			windows.forEach(function (win) {
 				this._onWindowAddedStartup(global.display, win);
@@ -118,11 +118,11 @@ MyExtension.prototype = {
 
 		// Listen to focus on other windows since desktop is focused until another
 		// window gains focus, to avoid innecesary overhead each time focus changes.
-		this._signals.connect(global.display, 'notify::focus-window',
+		this._signals.connect(global.display, "notify::focus-window",
 			function onUnfocus (display) {
 				if (desktop === display.get_focus_window())
 					return;
-				this._signals.disconnect('notify::focus-window', display, onUnfocus);
+				this._signals.disconnect("notify::focus-window", display, onUnfocus);
 				this.onWindowsStateChange();
 			});
 	},
@@ -130,15 +130,15 @@ MyExtension.prototype = {
 	// Parse windows status at startup
 	_onWindowAddedStartup: function (display, win) {
 		if (win.get_window_type() === Meta.WindowType.DESKTOP) {
-			this._signals.connect(win, 'focus', this._onDesktopFocused);
+			this._signals.connect(win, "focus", this._onDesktopFocused);
 		} else if (this._isWindowMaximized(win)) {
 			this._makePanelsOpaque();
 		}
 	},
 
 	_disconnectStartupEvents: function () {
-		this._signals.disconnect('window-created', global.display, this._onWindowAddedStartup);
-		this._signals.disconnect('notify::focus-window', global.display, this._disconnectStartupEvents);
+		this._signals.disconnect("window-created", global.display, this._onWindowAddedStartup);
+		this._signals.disconnect("notify::focus-window", global.display, this._disconnectStartupEvents);
 	},
 
 	_onWindowAppeared: function (wm, win) {
@@ -230,13 +230,13 @@ MyExtension.prototype = {
 	},
 
 	// This will be called only once the first
-	// time the extension is loaded. It's not worth it to
+	// time the extension is loaded. It"s not worth it to
 	// create a separate class, so we build everything here.
 	showStartupNotification: function() {
 		let source = new MessageTray.Source(this._meta.name);
 		let params = {
 			icon: new St.Icon({
-					icon_name: 'transparent-panels',
+					icon_name: "transparent-panels",
 					icon_type: St.IconType.FULLCOLOR,
 					icon_size: source.ICON_SIZE })
 		};
@@ -246,15 +246,15 @@ MyExtension.prototype = {
 			_("Open the extension settings and customize your panels"),
 			params);
 
-		notification.addButton('open-settings', 'Open settings');
-		notification.connect('action-invoked', Lang.bind(this, this.launchSettings));
+		notification.addButton("open-settings", "Open settings");
+		notification.connect("action-invoked", Lang.bind(this, this.launchSettings));
 
 		Main.messageTray.add(source);
 		source.notify(notification);
 	},
 
 	launchSettings: function() {
-		Util.spawnCommandLine('xlet-settings extension ' + this._meta.uuid);
+		Util.spawnCommandLine("xlet-settings extension " + this._meta.uuid);
 	},
 
 	// Keep backwards compatibility with 3.0.x for now
