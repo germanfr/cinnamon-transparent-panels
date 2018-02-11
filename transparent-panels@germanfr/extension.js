@@ -89,7 +89,6 @@ MyExtension.prototype = {
 		panels.forEach(panel => {
 			let transparentize = this.policy.is_transparent(panel);
 			this.make_transparent(panel, transparentize);
-			global.log(panel.panelId-1 + ': ' + transparentize + ' ' + panel);
 		});
 	},
 
@@ -181,5 +180,4 @@ function disable() {
 
 function init(metadata) {
 	extension = new MyExtension(metadata);
-	return extension;
 }

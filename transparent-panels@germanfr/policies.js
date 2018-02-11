@@ -111,12 +111,10 @@ MaximizedPolicy.prototype = {
 
 	// Parse windows status at startup
 	_on_window_added_startup: function (display, win) {
-		global.logWarning(win.get_title());
 		if (win.get_window_type() === Meta.WindowType.DESKTOP) {
 			this._signals.connect(win, "focus", this._on_desktop_focused);
 		} else if (this._is_window_maximized(win)) {
 			this.transparent[win.get_monitor()] = false;
-			global.logError('MAXIMIZED = ' + win.get_title());
 		}
 	},
 
