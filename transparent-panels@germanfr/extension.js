@@ -18,6 +18,7 @@
 */
 const UUID = 'transparent-panels@germanfr';
 
+const Panel = imports.ui.panel;
 const Settings = imports.ui.settings;
 const Main = imports.ui.main;
 const Util = imports.misc.util;
@@ -26,7 +27,9 @@ const St = imports.gi.St;
 const Gettext = imports.gettext;
 const GLib = imports.gi.GLib;
 
-const Policies = imports.extensions[UUID].policies;
+const Self = imports.extensions[UUID];
+const Policies = Self.policies;
+const Filter = Self.filter;
 
 const ANIMATIONS_DURATION = 200;
 
@@ -54,18 +57,26 @@ MyExtension.prototype = {
 		for(let i = 0; i < this._panel_status.length; i++)
 			this._panel_status[i] = false;
 
+		this._filter = new Filter.PanelFilter();
 		this.policy = new Policies.MaximizedPolicy(this);
 
 		this.settings = new Settings.ExtensionSettings(this, meta.uuid);
-		this.settings.bind("transparency-type", "transparency_type", this.onSettingsUpdated);
+		this.settings.bind("transparency-type", "transparency_type", this.on_settings_changed);
 		this.settings.bind("first-launch", "firstLaunch");
 		this.settings.bind("opacify", "opacify");
+
+		this.settings.bind("panel-top", "enable_position_top", this.on_settings_changed);
+		this.settings.bind("panel-right", "enable_position_right", this.on_settings_changed);
+		this.settings.bind("panel-bottom", "enable_position_bottom", this.on_settings_changed);
+		this.settings.bind("panel-left", "enable_position_left", this.on_settings_changed);
+
 		this._classname = this.transparency_type ? this.transparency_type : "panel-transparent-gradient";
 
-		Gettext.bindtextdomain(UUID, GLib.get_home_dir() + "/.local/share/locale");
+		Gettext.bindtextdomain(meta.uuid, GLib.get_home_dir() + "/.local/share/locale");
 	},
 
 	enable: function () {
+		this._update_filter();
 		this.policy.enable();
 
 		if(this.firstLaunch) {
@@ -83,13 +94,10 @@ MyExtension.prototype = {
 	},
 
 	on_state_change: function(monitor) {
-		let panels = monitor < 0 ? Main.getPanels() : Main.panelManager.getPanelsInMonitor(monitor);
-
-		// for..of doesn't work here for some reason
-		panels.forEach(panel => {
+		this._filter.forEachPanel(panel => {
 			let transparentize = this.policy.is_transparent(panel);
 			this.make_transparent(panel, transparentize);
-		});
+		}, monitor);
 	},
 
 	make_transparent: function(panel, transparent) {
@@ -117,13 +125,29 @@ MyExtension.prototype = {
 		actor.restore_easing_state();
 	},
 
-	onSettingsUpdated: function () {
+	_update_filter: function() {
+		if(this.enable_position_top) this._filter.add(Panel.PanelLoc.top);
+		else this._filter.remove(Panel.PanelLoc.top);
+
+		if(this.enable_position_right) this._filter.add(Panel.PanelLoc.right);
+		else this._filter.remove(Panel.PanelLoc.right);
+
+		if(this.enable_position_bottom) this._filter.add(Panel.PanelLoc.bottom);
+		else this._filter.remove(Panel.PanelLoc.bottom);
+
+		if(this.enable_position_left) this._filter.add(Panel.PanelLoc.left);
+		else this._filter.remove(Panel.PanelLoc.left);
+	},
+
+	on_settings_changed: function () {
 		// Remove old classes
 		Main.getPanels().forEach(panel => this.make_transparent(panel, false));
 
-		if (this.transparency_type) {
+		if (this.transparency_type)
 			this._classname = this.transparency_type;
-		}
+
+		this._update_filter();
+
 		this.on_state_change(-1);
 	},
 
