@@ -99,14 +99,13 @@ MaximizedPolicy.prototype = {
 		} else { // When the extension is loaded in the middle of a session
 			for(let win of windows)
 				this._on_window_added_startup(global.display, win);
-			this.controller.on_state_change(-1);
 		}
+		this.controller.on_state_change(-1);
 	},
 
 	_disconnect_startup_signals: function() {
 		this._startup_signals.disconnectAllSignals();
 		this._startup_signals = null;
-		this.controller.on_state_change(-1);
 	},
 
 	// Parse windows status at startup
@@ -114,7 +113,11 @@ MaximizedPolicy.prototype = {
 		if (win.get_window_type() === Meta.WindowType.DESKTOP) {
 			this._signals.connect(win, "focus", this._on_desktop_focused);
 		} else if (this._is_window_maximized(win)) {
-			this.transparent[win.get_monitor()] = false;
+			let monitor = win.get_monitor();
+			if(this.transparent[monitor]) {
+				this.transparent[monitor] = false;
+				this.controller.on_state_change(monitor);
+			}
 		}
 	},
 
