@@ -109,7 +109,7 @@ MyExtension.prototype = {
 
 	_set_background_opacity: function (panel, alpha) {
 		let actor = panel.actor;
-		let color = p_actor.get_background_color();
+		let color = actor.get_background_color();
 		color.alpha = alpha;
 		actor.save_easing_state();
 		actor.set_easing_duration(ANIMATIONS_DURATION);
@@ -119,7 +119,6 @@ MyExtension.prototype = {
 
 	onSettingsUpdated: function () {
 		// Remove old classes
-		this.transparent = true;
 		Main.getPanels().forEach(panel => this.make_transparent(panel, false));
 
 		if (this.transparency_type) {
