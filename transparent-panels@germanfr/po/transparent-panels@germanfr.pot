@@ -1,0 +1,91 @@
+#
+msgid ""
+msgstr ""
+
+#: extension.js:166
+#, javascript-format
+msgid "%s enabled"
+msgstr ""
+
+#: extension.js:167
+msgid "Open the extension settings and customize your panels"
+msgstr ""
+
+#: extension.js:170
+msgid "Open settings"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->panel-left->description
+msgid "Left panel"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->panel-
+#. bottom->description
+msgid "Bottom panel"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->section2->description
+msgid "Filter panels"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->panel-right->description
+msgid "Right panel"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->panel-top->description
+msgid "Top panel"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->opacify->description
+msgid "Remove theme transparency (experimental)"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->opacify->tooltip
+msgid "Remove panel transparency when it's not transparent."
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->description
+msgid "Type of transparency"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->tooltip
+msgid "Choose the type of transparency you want."
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->options
+msgid "Defined by theme"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->options
+msgid "Fully transparent"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->options
+msgid "Semi-transparent"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->transparency-
+#. type->options
+msgid "With shadow"
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->label2->description
+msgid "Select the panels that will be affected by this extension."
+msgstr ""
+
+#. transparent-panels@germanfr->settings-schema.json->section1->description
+msgid "General"
+msgstr ""
+
+#. transparent-panels@germanfr->metadata.json->description
+msgid "Transparentize your panels when there are no any maximized windows"
+msgstr ""
+
+#. transparent-panels@germanfr->metadata.json->name
+msgid "Transparent panels"
+msgstr ""
