@@ -10,21 +10,50 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: extension.js:245
-#, c-format
+#: extension.js:166
+#, javascript-format
 msgid "%s enabled"
 msgstr "%s activado"
 
-#: extension.js:246
+#: extension.js:167
 msgid "Open the extension settings and customize your panels"
 msgstr "Abre los austes de la extensión y personaliza los paneles"
 
-#: extension.js:249
+#: extension.js:170
 msgid "Open settings"
 msgstr "Abrir ajustes"
+
+#. transparent-panels@germanfr->settings-schema.json->panel-left->description
+msgid "Left panel"
+msgstr "Panel izquierdo"
+
+#. transparent-panels@germanfr->settings-schema.json->panel-
+#. bottom->description
+msgid "Bottom panel"
+msgstr "Panel inferior"
+
+#. transparent-panels@germanfr->settings-schema.json->section2->description
+msgid "Filter panels"
+msgstr "Filtrar paneles"
+
+#. transparent-panels@germanfr->settings-schema.json->panel-right->description
+msgid "Right panel"
+msgstr "Panel derecho"
+
+#. transparent-panels@germanfr->settings-schema.json->panel-top->description
+msgid "Top panel"
+msgstr "Panel superior"
+
+#. transparent-panels@germanfr->settings-schema.json->opacify->description
+msgid "Remove theme transparency (experimental)"
+msgstr "Eliminar transparencia del tema (experimental)"
+
+#. transparent-panels@germanfr->settings-schema.json->opacify->tooltip
+msgid "Remove panel transparency when it's not transparent."
+msgstr "Eliminar transparencia del panel cuando no es transparente."
 
 #. transparent-panels@germanfr->settings-schema.json->transparency-
 #. type->description
@@ -56,18 +85,18 @@ msgstr "Semi transparente"
 msgid "With shadow"
 msgstr "Con sombreado"
 
-#. transparent-panels@germanfr->settings-schema.json->opacify->description
-msgid "Remove theme transparency (experimental)"
-msgstr "Eliminar transparencia del tema (experimental)"
+#. transparent-panels@germanfr->settings-schema.json->label2->description
+msgid "Select the panels that will be affected by this extension."
+msgstr "Selecciona los paneles a los que afectará esta extensión."
 
-#. transparent-panels@germanfr->settings-schema.json->opacify->tooltip
-msgid "Remove panel transparency when it's not transparent."
-msgstr "Eliminar transparencia del panel cuando no es transparente."
-
-#. transparent-panels@germanfr->metadata.json->name
-msgid "Transparent panels"
-msgstr "Paneles transparentes"
+#. transparent-panels@germanfr->settings-schema.json->section1->description
+msgid "General"
+msgstr "General"
 
 #. transparent-panels@germanfr->metadata.json->description
 msgid "Transparentize your panels when there are no any maximized windows"
 msgstr "Haz tus paneles transparentes cuando no hay ninguna ventana maximizada"
+
+#. transparent-panels@germanfr->metadata.json->name
+msgid "Transparent panels"
+msgstr "Paneles transparentes"
