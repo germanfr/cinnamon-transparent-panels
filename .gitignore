@@ -1,2 +1,5 @@
 # Ignore distribution zip
 transparent-panels@germanfr.zip
+
+# Binary translation output files
+*.mo
