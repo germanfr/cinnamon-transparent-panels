@@ -163,7 +163,7 @@ MyExtension.prototype = {
 		};
 
 		let notification = new MessageTray.Notification(source,
-			_("%s enabled").format(this.meta.name),
+			_("%s enabled").format(_(this.meta.name)),
 			_("Open the extension settings and customize your panels"),
 			params);
 
