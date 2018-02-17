@@ -25,7 +25,7 @@ function PanelFilter() {
 }
 
 PanelFilter.prototype = {
-	_init: function() {
+	_init: function () {
 		this.panels = [];
 		this.filter = [true, true, true, true];
 
@@ -33,7 +33,7 @@ PanelFilter.prototype = {
 		Main.getPanels().forEach(panel => this.panels.push(panel));
 	},
 
-	forEachPanel: function(callback, monitor) {
+	for_each_panel: function (callback, monitor) {
 		for(let panel of this.panels)
 			if(panel.monitorIndex === monitor || monitor < 0)
 				callback.call(null, panel, monitor);
@@ -61,4 +61,4 @@ PanelFilter.prototype = {
 
 		this.filter[loc] = false;
 	}
-}
+};
