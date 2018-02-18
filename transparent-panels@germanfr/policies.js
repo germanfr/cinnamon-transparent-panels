@@ -158,7 +158,7 @@ MaximizedPolicy.prototype = {
 				if(desktop === focused || focused.get_monitor() !== monitor)
 					return;
 				this._signals.disconnect("notify::focus-window", display, focus_lost);
-				this._lookup_windows_state(monitor);
+				this._lookup_all_monitors();
 			});
 	},
 
