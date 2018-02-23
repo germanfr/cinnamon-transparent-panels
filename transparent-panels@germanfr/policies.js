@@ -64,7 +64,7 @@ MaximizedPolicy.prototype = {
 
 		this._signals.connect(global.window_manager, "minimize", this._on_window_disappeared);
 		this._signals.connect(global.window_manager, "unmaximize", this._on_window_disappeared);
-		this._signals.connect(global.screen, "window-removed", this._on_window_disappeared);
+		this._signals.connect(global.screen, "window-removed", this._lookup_all_monitors);
 		this._signals.connect(global.window_manager, "switch-workspace", this._lookup_all_monitors);
 
 		this._set_up_startup_signals();
