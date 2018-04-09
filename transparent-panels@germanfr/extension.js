@@ -64,7 +64,7 @@ MyExtension.prototype = {
 
 		this.settings = new Settings.ExtensionSettings(this, meta.uuid);
 		this.settings.bind("transparency-type", "transparency_type", this.on_settings_changed);
-		this.settings.bind("opacify", "opacify");
+		this.settings.bind("opacify", "opacify", this.on_settings_changed);
 		this.settings.bind("theme-defined", "theme_defined", this.on_settings_changed);
 
 		this.settings.bind("panel-top", "enable_position_top", this.on_settings_changed);
