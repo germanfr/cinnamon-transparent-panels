@@ -5,8 +5,8 @@
 	transition-duration: 200;
 }
 
-/* Customizable CSS class.
- * Define thess classes on you cinnamon.css theme. */
+/* Customizable CSS classes.
+   Define these classes in your theme's cinnamon.css file. */
 .panel-transparent {}
 .panel-semi-transparent {}
 .panel-transparent-with-shadow {}
