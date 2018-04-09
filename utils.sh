@@ -65,9 +65,10 @@ install_theme () {
         rm -rf "$install_dir/$UUID"
         unzip $zip_name -d "$install_dir"
         rm $zip_name
-
-        cinnamon-settings ${xlet_type}s &> /dev/null
     fi
+
+    cd "$UUID"
+    cinnamon-json-makepot -i
 
     echo "Xlet installed into $install_dir"
 }
