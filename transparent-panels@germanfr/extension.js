@@ -35,9 +35,6 @@ const Policies = Self.policies;
 const ANIMATIONS_DURATION = 200;
 const INTERNAL_PREFIX = "__internal";
 
-function log(msg) {
-	global.log(UUID + ": " + msg);
-}
 
 function _(str) {
 	let customTranslation = Gettext.dgettext(UUID, str);
