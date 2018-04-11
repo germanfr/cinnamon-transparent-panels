@@ -1,0 +1,12 @@
+ASSETS_DIR='icons'
+# Relative to the UUID folder
+PACKAGE_FILES=(
+    $(find . -mindepth 2 -name '*.js' | cut -d '/' -f3-)
+    $ASSETS_DIR/
+)
+# Files that need to be moved into the UUID folder
+EXTRA_FILES=(
+    'LICENSE'
+    'README.md'
+    'screenshot.png'
+)
