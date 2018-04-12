@@ -25,7 +25,7 @@ fi
 #  Constants
 # ======================================
 
-install_dir="$HOME/.local/share/${xlet_type}s"
+install_dir="$HOME/.local/share/cinnamon/${xlet_type}s"
 
 zip_name="${UUID}.zip"
 
