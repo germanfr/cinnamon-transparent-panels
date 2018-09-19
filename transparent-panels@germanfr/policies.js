@@ -18,7 +18,6 @@
 */
 
 const Meta = imports.gi.Meta;
-const Lang = imports.lang;
 const SignalManager = imports.misc.signalManager;
 
 const META_WINDOW_MAXIMIZED = (Meta.MaximizeFlags.VERTICAL | Meta.MaximizeFlags.HORIZONTAL);
@@ -60,13 +59,13 @@ MaximizedPolicy.prototype = {
 
 	enable: function () {
 		this._signals = new SignalManager.SignalManager(null);
-		this._signals.connect(global.window_manager, "maximize", Lang.bind(this, this._on_window_appeared));
-		this._signals.connect(global.window_manager, "map", Lang.bind(this, this._on_window_appeared));
+		this._signals.connect(global.window_manager, "maximize", this._on_window_appeared, this);
+		this._signals.connect(global.window_manager, "map", this._on_window_appeared, this);
 
-		this._signals.connect(global.window_manager, "minimize", Lang.bind(this, this._on_window_disappeared));
-		this._signals.connect(global.window_manager, "unmaximize", Lang.bind(this, this._on_window_disappeared));
-		this._signals.connect(global.screen, "window-removed", Lang.bind(this, this.lookup_all_monitors));
-		this._signals.connect(global.window_manager, "switch-workspace", Lang.bind(this, this.lookup_all_monitors));
+		this._signals.connect(global.window_manager, "minimize", this._on_window_disappeared, this);
+		this._signals.connect(global.window_manager, "unmaximize", this._on_window_disappeared, this);
+		this._signals.connect(global.screen, "window-removed", this.lookup_all_monitors, this);
+		this._signals.connect(global.window_manager, "switch-workspace", this.lookup_all_monitors, this);
 
 		this._set_up_startup_signals();
 	},
@@ -95,8 +94,8 @@ MaximizedPolicy.prototype = {
 
 		if(windows.length == 0) { // When the extension is loaded at startup
 			this._startup_signals = new SignalManager.SignalManager(null);
-			this._startup_signals.connect(global.display, "window-created", Lang.bind(this, this._on_window_added_startup));
-			this._startup_signals.connect(global.display, "notify::focus-window", Lang.bind(this, this._disconnect_startup_signals));
+			this._startup_signals.connect(global.display, "window-created", this._on_window_added_startup));
+			this._startup_signals.connect(global.display, "notify::focus-window", this._disconnect_startup_signals));
 		} else { // When the extension is loaded in the middle of a session
 			for(let win of windows)
 				this._on_window_added_startup(global.display, win);
@@ -112,7 +111,7 @@ MaximizedPolicy.prototype = {
 	// Parse windows status at startup
 	_on_window_added_startup: function (display, win) {
 		if(win.get_window_type() === Meta.WindowType.DESKTOP) {
-			this._signals.connect(win, "focus", Lang.bind(this, this._on_desktop_focused));
+			this._signals.connect(win, "focus", this._on_desktop_focused, this);
 		} else if(this._is_window_maximized(win)) {
 			let monitor = win.get_monitor();
 			if(this.transparent[monitor]) {
