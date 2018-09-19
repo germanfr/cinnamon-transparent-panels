@@ -94,8 +94,8 @@ MaximizedPolicy.prototype = {
 
 		if(windows.length == 0) { // When the extension is loaded at startup
 			this._startup_signals = new SignalManager.SignalManager(null);
-			this._startup_signals.connect(global.display, "window-created", this._on_window_added_startup));
-			this._startup_signals.connect(global.display, "notify::focus-window", this._disconnect_startup_signals));
+			this._startup_signals.connect(global.display, "window-created", this._on_window_added_startup, this);
+			this._startup_signals.connect(global.display, "notify::focus-window", this._disconnect_startup_signals, this);
 		} else { // When the extension is loaded in the middle of a session
 			for(let win of windows)
 				this._on_window_added_startup(global.display, win);
