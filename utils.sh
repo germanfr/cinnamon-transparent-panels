@@ -1,5 +1,7 @@
 #!/bin/bash
 
+GIST_URL='https://gist.githubusercontent.com/germanfr/6f48336523fa8a464362fb4249c63950/raw/utils.sh'
+
 # ======================================
 #  Auto xlet discovery
 # ======================================
@@ -59,8 +61,8 @@ install_theme () {
         spices_package &> /dev/null
         mkdir -p "$install_dir"
         rm -rf "$install_dir/$UUID"
-        unzip $zip_name -d "$install_dir"
-        rm $zip_name
+        unzip "$zip_name" -d "$install_dir"
+        rm "$zip_name"
     fi
 
     cd "$UUID"
@@ -72,10 +74,10 @@ install_theme () {
 spices_package () {
     rm -f "$zip_name"
     echo ${PACKAGE_FILES[@]}
-    zip -r --symlinks "$zip_name" ${COMMON_FILES[@]} ${PACKAGE_FILES[@]/#/${UUID}\/}
+    zip -r --symlinks "$zip_name" "${COMMON_FILES[@]} ${PACKAGE_FILES[@]/#/${UUID}\/}"
 
-    for ef in ${EXTRA_FILES[@]} ;do
-        local filename=$(basename $ef)
+    for ef in "${EXTRA_FILES[@]}"; do
+        local filename=$(basename "$ef")
         ln -rfs "$ef" "$UUID/$filename"
         zip -r "$zip_name" "$UUID/$filename"
         rm -rf "$UUID/$filename"
@@ -116,7 +118,7 @@ simplify_assets () {
 
         # temp dir for the output (can't output to self)
         local tmp_dir=$(mktemp -d)
-        local assets_list=$(find $ASSETS_DIR/ -name '*.svg')
+        local assets_list=$(find "$ASSETS_DIR/" -name '*.svg' -type f)
         local n_assets=$(echo "$assets_list" | wc -l)
         local completed=0
 
@@ -168,6 +170,10 @@ Changelog at: $url/commits/master"
     fi
 }
 
+update_self () {
+	wget -O $(basename $0) $GIST_URL
+}
+
 
 show_help () {
     local bold=$(tput bold)
@@ -176,20 +182,22 @@ show_help () {
 
     echo "\
 ${bold}${name^^} ${xlet_type^^} HELP${normal}
-Usage: ./$(basename $0) [--COMMAND]
+Usage: ./$(basename $0) [COMMAND]
 
 ${bold}COMMANDS${normal}
-  --install [dev]   Install the theme into the system.
+  install [dev]     Install the theme into the system.
                     Add 'dev' to just create a symbolic link to here.
 
-  --help            Show help.
+  help              Show help.
 
 ${bold}DEVELOPMENT COMMANDS${normal}
 
-  --pkg             Package files ready to be uploaded to the Cinnamon Spices.
+  pkg               Package files ready to be uploaded to the Cinnamon Spices.
 
-  --simplify        Optimize SVG assets for a smaller size and a better theme
+  simplify          Optimize SVG assets for a smaller size and a better theme
                     performance stripping metadata and other stuff.
+
+  update            Fetch the latest version available of this script.
 "
 }
 
@@ -203,18 +211,14 @@ operations[help]=show_help
 operations[pkg]=spices_package
 operations[simplify]=simplify_assets
 operations[submit]=submit_to_spices # Obscure
+operations[update]=update_self
 
-if [[ $1 == --?* ]]
-then
-    opname=${1:2}
-    opfunc="${operations[$opname]}"
+opname="$1"
+opfunc="${operations[$opname]}"
 
-    if [[ -n "$opfunc" ]]
-    then $opfunc "$@"
-    else
-        echo "$opname: command not found"
-        show_help
-    fi
+if [[ -n "$opfunc" ]]
+then $opfunc "$@"
 else
+    echo "$opname: command not found"
     show_help
 fi
