@@ -73,8 +73,9 @@ install_theme () {
 
 spices_package () {
     rm -f "$zip_name"
-    echo ${PACKAGE_FILES[@]}
-    zip -r --symlinks "$zip_name" "${COMMON_FILES[@]} ${PACKAGE_FILES[@]/#/${UUID}\/}"
+
+    local all_files="${COMMON_FILES[@]} ${PACKAGE_FILES[@]/#/${UUID}\/}"
+    zip -r --symlinks "$zip_name" $all_files
 
     for ef in "${EXTRA_FILES[@]}"; do
         local filename=$(basename "$ef")
